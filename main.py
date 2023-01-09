@@ -17,15 +17,19 @@ ev3 = EV3Brick()
 KopfMotor = Motor(Port.D)
 SlitherMotor = Motor(Port.A)
 SchubMotor = Motor(Port.B)
+obstacleSensor = InfraredSensor(Port.S4)
 
 
 # Write your program here.
 
 KopfMotor.run_time(-300,1000)
 while True:
-    ev3.light.on(Color.RED)
-    ev3.speaker.play_file(SoundFile.SNAKE_HISS)
-    KopfMotor.run_time(1000,800,Stop.COAST)
-    KopfMotor.run_time(-1000,800,Stop.COAST)
-    ev3.light.off()
-    wait(1)
+    if obstacleSensor.distance() < 30:
+        ev3.light.on(Color.RED)
+        ev3.speaker.play_file(SoundFile.SNAKE_HISS)
+        KopfMotor.run_time(1000,800,Stop.COAST)
+        KopfMotor.run_time(-1000,800,Stop.COAST)
+        ev3.light.off()
+        wait(1)
+    ev3.light.on(Color.YELLOW)
+    wait(1000)
