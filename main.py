@@ -18,32 +18,30 @@ slitherMotor = Motor(Port.A)
 pushMotor = Motor(Port.B)
 obstacleSensor = InfraredSensor(Port.S4)
 
-blink_colour = GREEN
+blink_colour = Color.GREEN
 
 # Write your program here.
 def blink():
   global blink_colour
   while True:
-    ev3.light.on(Color.blink_colour)
+    ev3.light.on(blink_colour)
     wait(200)
     ev3.light.off()
     wait(200)
 
 def attack():
-    ev3.speaker.play_file(SoundFile.SNAKE_HISS)
-    headMotor.run_time(1000,800,Stop.COAST, wait=False)
-    #ev3.light.on(Color.RED)
     global blink_colour
-    blink_colour = RED
-    headMotor.run_time(-1000,800,Stop.COAST,wait=False)
+    blink_colour = Color.RED
+    ev3.speaker.play_file(SoundFile.SNAKE_HISS)
+    headMotor.run_time(1000,800,Stop.COAST)
+    headMotor.run_time(-1000,800,Stop.COAST)
     wait(1000)
     hide()
     wait(1000)
 
 def slither():
-    #ev3.light.on(Color.YELLOW)
     global blink_colour
-    blink_colour = GREEN
+    blink_colour = Color.YELLOW
         # slither around
     pushMotor.run_time(1000,1000)
 
@@ -52,15 +50,13 @@ def hide():
 
 def main_procedure():
     while True:
-    try:
         if obstacleSensor.distance() < 30:
             attack()
         # else
         slither()
-    except:
-        print "Error!"
 
 # start:
 headMotor.run_time(-300,1000)
-_thread.start_new_thread(blink())
-_thread.start_new_thread(main_procedure())
+_thread.start_new_thread(blink, ())
+#_thread.start_new_thread(main_procedure, ())
+main_procedure()
