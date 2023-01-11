@@ -18,10 +18,13 @@ slitherMotor = Motor(Port.A)
 pushMotor = Motor(Port.B)
 obstacleSensor = InfraredSensor(Port.S4)
 
+blink_colour = GREEN
+
 # Write your program here.
-def blink(colour):
+def blink():
+  global blink_colour
   while True:
-    ev3.light.on(Color.colour)
+    ev3.light.on(Color.blink_colour)
     wait(200)
     ev3.light.off()
     wait(200)
@@ -30,19 +33,19 @@ def attack():
     ev3.speaker.play_file(SoundFile.SNAKE_HISS)
     headMotor.run_time(1000,800,Stop.COAST, wait=False)
     #ev3.light.on(Color.RED)
-    blinke(RED)
+    global blink_colour
+    blink_colour = RED
     headMotor.run_time(-1000,800,Stop.COAST,wait=False)
     wait(1000)
     hide()
     wait(1000)
-    ev3.light.off()
 
 def slither():
     #ev3.light.on(Color.YELLOW)
-    blink(GREEN)
+    global blink_colour
+    blink_colour = GREEN
         # slither around
     pushMotor.run_time(1000,1000)
-    ev3.light.off()
 
 def hide():
     pushMotor.run_time(-800,2000, wait=False)
