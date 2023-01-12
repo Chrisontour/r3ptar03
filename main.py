@@ -50,8 +50,8 @@ def hide():
 
 def main_procedure():
     while obstacleSensor.distance() < 30:
-        attack()
-    slither()     # else
+        attack(1000)
+    slither(800)     # else
 
 # start:
 headMotor.run_time(-300,1000)
