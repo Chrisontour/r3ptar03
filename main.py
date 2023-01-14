@@ -10,6 +10,7 @@ from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
 import _thread
+import random
 
 # Create your objects here.
 ev3 = EV3Brick()
@@ -29,31 +30,37 @@ def blink(duration):
     ev3.light.off()
     wait(duration)
 
+def play_sound():
+    ev3.speaker.play_file(SoundFile.SNAKE_HISS)
+
+
 def attack(speed):
     global blink_colour
     blink_colour = Color.RED
-    ev3.speaker.play_file(SoundFile.SNAKE_HISS)
-    headMotor.run_time(speed,800,Stop.COAST)
-    headMotor.run_time(-speed,800,Stop.COAST)
-    wait(1000)
+    _thread.start_new_thread(play_sound, ())
+    pushMotor.brake()
+    headMotor.run_time(speed,400,Stop.COAST)
+    headMotor.run_time(-2*speed,1000)
     hide()
     wait(1000)
 
 def slither(speed):
     global blink_colour
     blink_colour = Color.YELLOW
-        # slither around
-    pushMotor.run_time(speed,1000)
+    pushMotor.run(speed)
+    slitherMotor.run_time(random.randint(-500,500),200)
 
 def hide():
     pushMotor.run_time(-800,2000, wait=False)
 
 def main_procedure():
-    while obstacleSensor.distance() < 30:
+    while True:
+        while obstacleSensor.distance() > 40:
+            slither(600)     
         attack(1000)
-    slither(800)     # else
 
 # start:
+_thread.start_new_thread(blink, (55,))
+wait(1500)
 headMotor.run_time(-300,1000)
-_thread.start_new_thread(blink, (200))
 main_procedure()
