@@ -41,7 +41,7 @@ def attack(speed):
     pushMotor.brake()
     headMotor.run_time(speed,400,Stop.COAST)
     headMotor.run_time(-2*speed,1000)
-    hide(1500)
+    hide()
    
 def slither(speed):
     global blink_colour
@@ -49,15 +49,16 @@ def slither(speed):
     pushMotor.run(speed)
     slitherMotor.run_time(random.randint(-500,500),200)
 
-def hide(duration):
-	global blink_colour
+def hide():
+    global blink_colour
     blink_colour = Color.YELLOW
-	slitherMotor.run(360)
+    slitherMotor.run(360)
     pushMotor.run(-800)
-	wait(duration)
-	slitherMotor.brake()
-	pushMotor.brake()
-	wait(1000)
+    wait(1500)
+    slitherMotor.brake()
+    pushMotor.brake()
+    slitherMotor.run(-360)
+    wait(1000)
 
 def main_procedure():
     while True:
